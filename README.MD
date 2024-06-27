@@ -4,6 +4,7 @@
 - **Title**: Spring Aws | Yan Corrêa
 - **Version**: 1.0
 - **Host**: 54.207.226.158
+-- **SWAGGER URL**: http://54.207.226.158:8080/swagger-ui/index.html
 
 ## TO-DO List Api using Java 21, Docker, DynamoDb, CI/CD with GH Actions
 
