@@ -24,3 +24,11 @@ jobs:
               run: docker build -t yansz9/springawsdeploy .
             - name: Push image docker 
               run: docker push yansz9/springawsdeploy
+    deploy:
+        needs: build
+        runs-on: self-hosted
+        steps:
+            - name: Pull image from docker hub
+              run: docker pull yansz9/springawsdeploy:latest
+            - name: Run Ddocker Container
+              run: docker run -d p- 8080:80 --name springawsdeploy yansz9/springawsdeploy 
