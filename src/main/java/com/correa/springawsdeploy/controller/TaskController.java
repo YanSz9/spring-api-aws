@@ -1,12 +1,11 @@
 package com.correa.springawsdeploy.controller;
 
-import com.correa.springawsdeploy.Dtos.DescriptionDto;
+import com.correa.springawsdeploy.Dtos.TaskDto;
 import com.correa.springawsdeploy.entity.Task;
 import io.awspring.cloud.dynamodb.DynamoDbTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.correa.springawsdeploy.service.TaskService;
-import software.amazon.awssdk.enhanced.dynamodb.Key;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,8 +22,8 @@ public class TaskController {
         this.taskService = taskService;
     }
     @PostMapping("/create")
-    public ResponseEntity<Void> createTask(@RequestBody DescriptionDto descriptionDto) {
-        taskService.saveTask(descriptionDto);
+    public ResponseEntity<Void> createTask(@RequestBody TaskDto taskDto) {
+        taskService.saveTask(taskDto.getDescription(), taskDto.getImageURl());
         return ResponseEntity.ok().build();
     }
     @GetMapping("/getTaskById/{taskID}")
@@ -39,8 +38,8 @@ public class TaskController {
     }
     @PutMapping("/update/{taskID}")
     public ResponseEntity<Void> updateTask(@PathVariable("taskID") String taskID,
-                                           @RequestBody DescriptionDto descriptionDto) {
-        boolean updated = taskService.updateTask(taskID, descriptionDto.getDescription());
+                                           @RequestBody TaskDto taskDto) {
+        boolean updated = taskService.updateTask(taskID, taskDto.getDescription(), taskDto.getImageURl());
 
         if (!updated) {
             return ResponseEntity.notFound().build();

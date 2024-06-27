@@ -1,9 +1,7 @@
 package com.correa.springawsdeploy.service;
 
-
-
-import com.correa.springawsdeploy.Dtos.DescriptionDto;
 import com.correa.springawsdeploy.entity.Task;
+import com.correa.springawsdeploy.producer.SqsProducer;
 import io.awspring.cloud.dynamodb.DynamoDbTemplate;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.enhanced.dynamodb.Key;
@@ -18,19 +16,25 @@ import java.util.UUID;
 public class TaskService {
 
     private final DynamoDbTemplate dynamoDbTemplate;
+    private final SqsProducer sqsProducer;
 
-    public TaskService(DynamoDbTemplate dynamoDbTemplate) {
+
+    private TaskService taskService;
+    public TaskService(DynamoDbTemplate dynamoDbTemplate, SqsProducer sqsProducer) {
         this.dynamoDbTemplate = dynamoDbTemplate;
+        this.sqsProducer = sqsProducer;
     }
 
-    public void saveTask(DescriptionDto descriptionDto) {
+    public void saveTask(String description, String imageURL) {
         UUID taskID = UUID.randomUUID();
 
         Task task = new Task();
         task.setTaskID(taskID);
-        task.setDescription(descriptionDto.getDescription());
+        task.setDescription(description);
+        task.setImageURl(imageURL);;
 
         dynamoDbTemplate.save(task);
+        sqsProducer.sendMessage("Task created: " + taskID);
     }
 
     public List<Task> getTaskById(UUID taskID) {
@@ -47,7 +51,7 @@ public class TaskService {
         return tasks.items().stream().toList();
     }
 
-    public boolean updateTask(String taskID, String description) {
+    public boolean updateTask(String taskID, String description, String imageURL) {
         var key = Key.builder()
                 .partitionValue(taskID)
                 .build();
@@ -58,7 +62,9 @@ public class TaskService {
         }
 
         task.setDescription(description);
+        task.setImageURl(imageURL);
         dynamoDbTemplate.save(task);
+        sqsProducer.sendMessage("Task updated: " + taskID);
 
         return true;
     }

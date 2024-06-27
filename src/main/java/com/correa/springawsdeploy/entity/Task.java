@@ -10,6 +10,7 @@ import java.util.UUID;
 public class Task {
     private UUID taskID;
     private String description;
+    private String imageURl;
 
 
     @DynamoDbPartitionKey
@@ -28,5 +29,14 @@ public class Task {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getImageURl() {
+        return imageURl;
+    }
+
+    public void setImageURl(String imageURl) {
+        this.imageURl = imageURl;
+    }
+
 
 }
