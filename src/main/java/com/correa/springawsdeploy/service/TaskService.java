@@ -25,7 +25,7 @@ public class TaskService {
         this.sqsProducer = sqsProducer;
     }
 
-    public void saveTask(String description, String imageURL) {
+    public Task saveTask(String description, String imageURL) {
         UUID taskID = UUID.randomUUID();
 
         Task task = new Task();
@@ -35,6 +35,7 @@ public class TaskService {
 
         dynamoDbTemplate.save(task);
         sqsProducer.sendMessage("Task created: " + taskID);
+        return task;
     }
 
     public List<Task> getTaskById(UUID taskID) {
@@ -51,37 +52,29 @@ public class TaskService {
         return tasks.items().stream().toList();
     }
 
-    public boolean updateTask(String taskID, String description, String imageURL) {
+    public Task updateTask(String taskID, String description, String imageURL) {
         var key = Key.builder()
                 .partitionValue(taskID)
                 .build();
         var task = dynamoDbTemplate.load(key, Task.class);
-
-        if (task == null) {
-            return false;
-        }
-
+        
         task.setDescription(description);
         task.setImageURl(imageURL);
         dynamoDbTemplate.save(task);
         sqsProducer.sendMessage("Task updated: " + taskID);
 
-        return true;
+        return task;
     }
 
-    public boolean deleteTask(String taskID) {
+    public Task deleteTask(String taskID) {
         var key = Key.builder()
                 .partitionValue(taskID)
                 .build();
         var task = dynamoDbTemplate.load(key, Task.class);
 
-        if (task == null) {
-            return false;
-        }
-
         dynamoDbTemplate.delete(task);
 
-        return true;
+        return task;
     }
 }
 

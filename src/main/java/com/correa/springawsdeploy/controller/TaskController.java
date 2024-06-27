@@ -22,9 +22,9 @@ public class TaskController {
         this.taskService = taskService;
     }
     @PostMapping("/create")
-    public ResponseEntity<Void> createTask(@RequestBody TaskDto taskDto) {
-        taskService.saveTask(taskDto.getDescription(), taskDto.getImageURl());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Task> createTask(@RequestBody TaskDto taskDto) {
+        Task createdTask = taskService.saveTask(taskDto.getDescription(), taskDto.getImageURl());
+        return ResponseEntity.ok(createdTask);
     }
     @GetMapping("/getTaskById/{taskID}")
     public ResponseEntity<List<Task>> findTaskById(@PathVariable("taskID") UUID taskID) {
@@ -37,23 +37,22 @@ public class TaskController {
         return ResponseEntity.ok(taskList);
     }
     @PutMapping("/update/{taskID}")
-    public ResponseEntity<Void> updateTask(@PathVariable("taskID") String taskID,
+    public ResponseEntity<Task> updateTask(@PathVariable("taskID") String taskID,
                                            @RequestBody TaskDto taskDto) {
-        boolean updated = taskService.updateTask(taskID, taskDto.getDescription(), taskDto.getImageURl());
-
-        if (!updated) {
+        Task updatedTask = taskService.updateTask(taskID, taskDto.getDescription(), taskDto.getImageURl());
+        if (updatedTask == null) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(updatedTask);
     }
     @DeleteMapping("/delete/{taskID}")
-    public ResponseEntity<Void> deleteTask(@PathVariable("taskID") String taskID) {
-        boolean deleted = taskService.deleteTask(taskID);
-        if (!deleted) {
+    public ResponseEntity<Task> deleteTask(@PathVariable("taskID") String taskID) {
+        Task deletedTask = taskService.deleteTask(taskID);
+        if (deletedTask == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(deletedTask);
     }
 }
 
