@@ -9,7 +9,7 @@ import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 public class SqsProducer {
 
     private final SqsAsyncClient sqsAsyncClient;
-    private final String queueUrl = "http://localhost:4566/000000000000/task-queue";
+    private final String queueUrl = "https://sqs.sa-east-1.amazonaws.com/590183694484/task-queue";
 
     @Autowired
     public SqsProducer(SqsAsyncClient sqsAsyncClient) {
