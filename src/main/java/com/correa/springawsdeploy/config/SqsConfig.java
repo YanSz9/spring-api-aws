@@ -14,6 +14,7 @@ public class SqsConfig {
     @Bean
     public SqsAsyncClient sqsAsyncClient() {
         return SqsAsyncClient.builder()
+                .endpointOverride(URI.create("https://sqs.sa-east-1.amazonaws.com/590183694484/task-queue"))
                 .region(Region.SA_EAST_1)
                 .build();
     }
