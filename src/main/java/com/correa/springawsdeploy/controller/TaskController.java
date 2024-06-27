@@ -21,7 +21,7 @@ public class TaskController {
         this.dynamoDbTemplate = dynamoDbTemplate;
         this.taskService = taskService;
     }
-    @PostMapping("/create")
+    @PostMapping("/createTask")
     public ResponseEntity<Task> createTask(@RequestBody TaskDto taskDto) {
         Task createdTask = taskService.saveTask(taskDto.getDescription(), taskDto.getImageURl());
         return ResponseEntity.ok(createdTask);
@@ -36,7 +36,7 @@ public class TaskController {
         List<Task> taskList = taskService.getAllTasks();
         return ResponseEntity.ok(taskList);
     }
-    @PutMapping("/update/{taskID}")
+    @PutMapping("/updateTask/{taskID}")
     public ResponseEntity<Task> updateTask(@PathVariable("taskID") String taskID,
                                            @RequestBody TaskDto taskDto) {
         Task updatedTask = taskService.updateTask(taskID, taskDto.getDescription(), taskDto.getImageURl());
@@ -46,7 +46,7 @@ public class TaskController {
 
         return ResponseEntity.ok(updatedTask);
     }
-    @DeleteMapping("/delete/{taskID}")
+    @DeleteMapping("/deleteTask/{taskID}")
     public ResponseEntity<Task> deleteTask(@PathVariable("taskID") String taskID) {
         Task deletedTask = taskService.deleteTask(taskID);
         if (deletedTask == null) {

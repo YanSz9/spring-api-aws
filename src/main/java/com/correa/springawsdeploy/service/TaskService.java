@@ -57,7 +57,7 @@ public class TaskService {
                 .partitionValue(taskID)
                 .build();
         var task = dynamoDbTemplate.load(key, Task.class);
-        
+
         task.setDescription(description);
         task.setImageURl(imageURL);
         dynamoDbTemplate.save(task);
