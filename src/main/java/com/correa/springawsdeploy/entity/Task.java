@@ -11,6 +11,7 @@ public class Task {
     private UUID taskID;
     private String description;
 
+
     @DynamoDbPartitionKey
     public UUID getTaskID() {
         return taskID;
@@ -20,7 +21,6 @@ public class Task {
         this.taskID = taskID;
     }
 
-    @DynamoDbSortKey
     public String getDescription() {
         return description;
     }
