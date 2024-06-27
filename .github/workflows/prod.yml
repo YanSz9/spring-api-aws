@@ -10,4 +10,17 @@ jobs:
         steps: 
             - name: Checkout code
               uses: actions/checkout@v3 
-              
+
+            - name: Setup Java
+              uses: actions/setup-java@v3
+              with: 
+                distribution: 'temurin'
+                java-version: 21
+            - name: Build Project
+              run: mvn clean install -Dskiptests
+            - name: Login Docker Hub 
+              run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+            - name: Build Docker image
+              run: docker build -t yansz9/springawsdeploy .
+            - name: Push image docker 
+              run: docker push yansz9/springawsdeploy
