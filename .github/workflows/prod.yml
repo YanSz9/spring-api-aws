@@ -30,6 +30,8 @@ jobs:
         steps:
             - name: Pull image from docker hub
               run: sudo docker pull yansz9/springawsdeploy:latest
+            - name: Remove Docker Container
+              run: docker rm -f springawsdeploy
             - name: Run Docker Container
               run: docker run -d -p 8080:8080 --name springawsdeploy yansz9/springawsdeploy
 
