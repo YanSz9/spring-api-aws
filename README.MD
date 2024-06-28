@@ -40,5 +40,3 @@
   curl -X DELETE -H "Content-Type: application/json" -d  54.207.226.158/v1/task/deleteTask/{taskID}
   
   ```
-
-denis teste
